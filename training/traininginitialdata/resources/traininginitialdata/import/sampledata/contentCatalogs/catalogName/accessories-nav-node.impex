@@ -1,0 +1,27 @@
+$contentCatalog = electronicsContentCatalog
+$contentCatalogName = Electronics Content Catalog
+$productCatalog = electronicsProductCatalog
+$productCatalogName = Electronics Product Catalog
+
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]), CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+$productCV = catalogVersion(catalog(id[default=$productCatalog]), version[default='Staged'])[unique=true, default=$productCatalog:Staged]
+$category = category(code, $productCV)
+$supercategories = source(code, $productCV)[unique=true]
+$categories = target(code, $productCV)[unique=true]
+
+############# Accessories nav node  #####################
+# Insert Categories
+INSERT_UPDATE Category; code[unique = true]; $productCV; supercategories(code, $productCV); name        ; allowedPrincipals(uid)[default = 'customergroup']
+                      ; 410                ;           ;                                  ; Accessories ;
+# Insert Category Structure
+#INSERT_UPDATE CategoryCategoryRelation; $categories; $supercategories
+#                                      ; 585        ; 410
+# Category link
+INSERT_UPDATE CMSLinkComponent; $contentCV[unique = true]; uid[unique = true] ; name                 ; url                ; &linkRef           ; &componentRef      ; target(code)[default = 'sameWindow']; $category; linkName[lang = en]
+                              ;                          ; AccessoriesNavLink ; Accessories Nav Link ; /Accessories/c/410 ; AccessoriesNavLink ; AccessoriesNavLink ;                                     ; 410      ; Accessories ;
+# New navigation node
+INSERT_UPDATE CMSNavigationNode; uid[unique = true] ; $contentCV[unique = true]; name                        ; parent(uid, $contentCV)    ; links(&linkRef)    ; &nodeRef           ; title[lang = en]
+                               ; AccessoriesNavNode ;                          ; Accessories Navigation Node ; ElectronicsCategoryNavNode ; AccessoriesNavLink ; AccessoriesNavNode ; Accessories
+# Insert the new nav node into the header
+INSERT_UPDATE CMSNavigationEntry; uid[unique = true]      ; $contentCV[unique = true]; name                              ; navigationNode(&nodeRef); item(CMSLinkComponent.uid, CMSLinkComponent.$contentCV);
+                                ; AccessoriesNavNodeEntry ;                          ; Accessories Navigation Node Entry ; AccessoriesNavNode      ; AccessoriesNavLink
