@@ -27,6 +27,13 @@
         </enumtype>
     </enumtypes>
 
+    <relations>
+        <relation code="LegacyOrder2LegacyOrderEntry" localized="false" autocreate="true" generate="true">
+            <sourceElement type="LegacyOrder" cardinality="one" qualifier="legacyOrder"/>
+            <targetElement type="LegacyOrderEntry" cardinality="many" qualifier="legacyOrderEntry"/>
+        </relation>
+    </relations>
+
     <itemtypes>
 
         <!-- Add your item definitions here -->
@@ -115,8 +122,54 @@
                     </attribute>
                 </attributes>
             </itemtype>
-
         </typegroup>
 
+        <typegroup name="Electronics Legacy Orders">
+            <itemtype code="LegacyOrder" generate="true" autocreate="true"
+                      jaloclass="de.hybris.training.core.jalo.LegacyOrder" extends="GenericItem">
+                <deployment table="LegacyOrders" typecode="15600"/>
+                <attributes>
+                    <attribute qualifier="orderTotal" type="java.lang.Double">
+                        <persistence type="property"/>
+                        <modifiers read="true" write="true"/>
+                    </attribute>
+                    <attribute qualifier="orderNumber" type="java.lang.String">
+                        <persistence type="property"/>
+                        <modifiers write="true" read="true" unique="true" optional="false" initial="true"/>
+                    </attribute>
+                    <attribute qualifier="orderStatus" type="OrderStatus">
+                        <persistence type="property"/>
+                        <modifiers write="true" read="true"/>
+                    </attribute>
+                    <attribute qualifier="customer" type="Customer">
+                        <persistence type="property"/>
+                        <modifiers read="true" write="true"/>
+                    </attribute>
+                </attributes>
+            </itemtype>
+
+            <itemtype code="LegacyOrderEntry" generate="true" autocreate="true"
+                      jaloclass="de.hybris.training.core.jalo.LegacyOrderEntry" extends="GenericItem">
+                <deployment table="LegacyOrderEntries" typecode="15601"/>
+                <attributes>
+                    <attribute qualifier="uid" type="java.lang.String">
+                        <persistence type="property"/>
+                        <modifiers write="true" read="true" unique="true" optional="false" initial="true"/>
+                    </attribute>
+                    <attribute qualifier="product" type="Product">
+                        <persistence type="property"/>
+                        <modifiers read="true" write="true"/>
+                    </attribute>
+                    <attribute qualifier="quantity" type="java.lang.Integer">
+                        <persistence type="property"/>
+                        <modifiers read="true" write="true"/>
+                    </attribute>
+                    <attribute qualifier="basePrice" type="java.lang.Double">
+                        <persistence type="property"/>
+                        <modifiers read="true" write="true"/>
+                    </attribute>
+                </attributes>
+            </itemtype>
+        </typegroup>
     </itemtypes>
 </items>
