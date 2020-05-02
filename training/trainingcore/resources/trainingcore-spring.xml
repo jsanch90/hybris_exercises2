@@ -543,4 +543,9 @@
 	<alias name="defaultProductPastDaysAttributeHandler" alias="productPastDaysAttributeHandler"/>
 	<bean id="defaultProductPastDaysAttributeHandler" class="de.hybris.training.core.attributehandlers.ProductPastDaysAttributeHandler"/>
 
+<!--	Legacy Orders DAO-->
+	<alias name="defaultLegacyOrderDao" alias="legacyOrderDao"/>
+<bean id="defaultLegacyOrderDao" parent="abstractItemDao" class="de.hybris.training.core.daos.impl.DefaultLegacyOrdersDao">
+	<property name="pagedFlexibleSearchService" ref="pagedFlexibleSearchService"/>
+</bean>
 </beans>

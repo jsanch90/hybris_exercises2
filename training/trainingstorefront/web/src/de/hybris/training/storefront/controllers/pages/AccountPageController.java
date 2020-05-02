@@ -143,6 +143,7 @@ public class AccountPageController extends AbstractSearchPageController
 	private static final String ADD_EDIT_ADDRESS_CMS_PAGE = "add-edit-address";
 	private static final String PAYMENT_DETAILS_CMS_PAGE = "payment-details";
 	private static final String ORDER_HISTORY_CMS_PAGE = "orders";
+	private static final String LEGACY_ORDER_HISTORY_CMS_PAGE = "legacy_orders";
 	private static final String ORDER_DETAIL_CMS_PAGE = "order";
 	private static final String CONSENT_MANAGEMENT_CMS_PAGE = "consents";
 	private static final String CLOSE_ACCOUNT_CMS_PAGE = "close-account";
@@ -309,6 +310,24 @@ public class AccountPageController extends AbstractSearchPageController
 		final SearchPageData<OrderHistoryData> searchPageData = orderFacade.getPagedOrderHistoryForStatuses(pageableData);
 		populateModel(model, searchPageData, showMode);
 		final ContentPageModel orderHistoryPage = getContentPageForLabelOrId(ORDER_HISTORY_CMS_PAGE);
+		storeCmsPageInModel(model, orderHistoryPage);
+		setUpMetaDataForContentPage(model, orderHistoryPage);
+		model.addAttribute(BREADCRUMBS_ATTR, accountBreadcrumbBuilder.getBreadcrumbs("text.account.orderHistory"));
+		model.addAttribute(ThirdPartyConstants.SeoRobots.META_ROBOTS, ThirdPartyConstants.SeoRobots.NOINDEX_NOFOLLOW);
+		return getViewForPage(model);
+	}
+
+	@RequestMapping(value = "/legacy_orders", method = RequestMethod.GET)
+	@RequireHardLogIn
+	public String legacyOrders(@RequestParam(value = "page", defaultValue = "0") final int page,
+						 @RequestParam(value = "show", defaultValue = "Page") final ShowMode showMode,
+						 @RequestParam(value = "sort", required = false) final String sortCode, final Model model) throws CMSItemNotFoundException
+	{
+		// Handle paged search results
+		final PageableData pageableData = createPageableData(page, 5, sortCode, showMode);
+		final SearchPageData<OrderHistoryData> searchPageData = orderFacade.getPagedOrderHistoryForStatuses(pageableData);
+		populateModel(model, searchPageData, showMode);
+		final ContentPageModel orderHistoryPage = getContentPageForLabelOrId(LEGACY_ORDER_HISTORY_CMS_PAGE);
 		storeCmsPageInModel(model, orderHistoryPage);
 		setUpMetaDataForContentPage(model, orderHistoryPage);
 		model.addAttribute(BREADCRUMBS_ATTR, accountBreadcrumbBuilder.getBreadcrumbs("text.account.orderHistory"));

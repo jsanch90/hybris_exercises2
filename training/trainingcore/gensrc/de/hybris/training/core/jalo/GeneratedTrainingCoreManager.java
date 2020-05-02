@@ -1,7 +1,7 @@
 /*
  * ----------------------------------------------------------------
  * --- WARNING: THIS FILE IS GENERATED AND WILL BE OVERWRITTEN! ---
- * --- Generated at Apr 25, 2020, 7:28:33 PM                    ---
+ * --- Generated at Apr 30, 2020, 12:45:17 PM                   ---
  * ----------------------------------------------------------------
  *  
  * [y] hybris Platform
@@ -31,6 +31,8 @@ import de.hybris.training.core.jalo.ApparelProduct;
 import de.hybris.training.core.jalo.ApparelSizeVariantProduct;
 import de.hybris.training.core.jalo.ApparelStyleVariantProduct;
 import de.hybris.training.core.jalo.ElectronicsColorVariantProduct;
+import de.hybris.training.core.jalo.LegacyOrder;
+import de.hybris.training.core.jalo.LegacyOrderEntry;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -165,6 +167,58 @@ public abstract class GeneratedTrainingCoreManager extends Extension
 	public ElectronicsColorVariantProduct createElectronicsColorVariantProduct(final Map attributeValues)
 	{
 		return createElectronicsColorVariantProduct( getSession().getSessionContext(), attributeValues );
+	}
+	
+	public LegacyOrder createLegacyOrder(final SessionContext ctx, final Map attributeValues)
+	{
+		try
+		{
+			ComposedType type = getTenant().getJaloConnection().getTypeManager().getComposedType( TrainingCoreConstants.TC.LEGACYORDER );
+			return (LegacyOrder)type.newInstance( ctx, attributeValues );
+		}
+		catch( JaloGenericCreationException e)
+		{
+			final Throwable cause = e.getCause();
+			throw (cause instanceof RuntimeException ?
+			(RuntimeException)cause
+			:
+			new JaloSystemException( cause, cause.getMessage(), e.getErrorCode() ) );
+		}
+		catch( JaloBusinessException e )
+		{
+			throw new JaloSystemException( e ,"error creating LegacyOrder : "+e.getMessage(), 0 );
+		}
+	}
+	
+	public LegacyOrder createLegacyOrder(final Map attributeValues)
+	{
+		return createLegacyOrder( getSession().getSessionContext(), attributeValues );
+	}
+	
+	public LegacyOrderEntry createLegacyOrderEntry(final SessionContext ctx, final Map attributeValues)
+	{
+		try
+		{
+			ComposedType type = getTenant().getJaloConnection().getTypeManager().getComposedType( TrainingCoreConstants.TC.LEGACYORDERENTRY );
+			return (LegacyOrderEntry)type.newInstance( ctx, attributeValues );
+		}
+		catch( JaloGenericCreationException e)
+		{
+			final Throwable cause = e.getCause();
+			throw (cause instanceof RuntimeException ?
+			(RuntimeException)cause
+			:
+			new JaloSystemException( cause, cause.getMessage(), e.getErrorCode() ) );
+		}
+		catch( JaloBusinessException e )
+		{
+			throw new JaloSystemException( e ,"error creating LegacyOrderEntry : "+e.getMessage(), 0 );
+		}
+	}
+	
+	public LegacyOrderEntry createLegacyOrderEntry(final Map attributeValues)
+	{
+		return createLegacyOrderEntry( getSession().getSessionContext(), attributeValues );
 	}
 	
 	@Override

@@ -1,7 +1,7 @@
 /*
  * ----------------------------------------------------------------
  * --- WARNING: THIS FILE IS GENERATED AND WILL BE OVERWRITTEN! ---
- * --- Generated at Apr 25, 2020, 7:28:33 PM                    ---
+ * --- Generated at Apr 30, 2020, 12:45:17 PM                   ---
  * ----------------------------------------------------------------
  *  
  * [y] hybris Platform
@@ -27,6 +27,8 @@ public class GeneratedTrainingCoreConstants
 		public static final String APPARELSIZEVARIANTPRODUCT = "ApparelSizeVariantProduct".intern();
 		public static final String APPARELSTYLEVARIANTPRODUCT = "ApparelStyleVariantProduct".intern();
 		public static final String ELECTRONICSCOLORVARIANTPRODUCT = "ElectronicsColorVariantProduct".intern();
+		public static final String LEGACYORDER = "LegacyOrder".intern();
+		public static final String LEGACYORDERENTRY = "LegacyOrderEntry".intern();
 		public static final String SWATCHCOLORENUM = "SwatchColorEnum".intern();
 	}
 	public static class Attributes
@@ -54,6 +56,10 @@ public class GeneratedTrainingCoreConstants
 			public static final String WHITE = "WHITE".intern();
 			public static final String YELLOW = "YELLOW".intern();
 		}
+	}
+	public static class Relations
+	{
+		public static final String LEGACYORDER2LEGACYORDERENTRY = "LegacyOrder2LegacyOrderEntry".intern();
 	}
 	
 	protected GeneratedTrainingCoreConstants()

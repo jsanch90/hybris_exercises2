@@ -1,0 +1,26 @@
+$contentCatalog = electronicsContentCatalog
+$contentCatalogName = Electronics Content Catalog
+$productCatalog = electronicsProductCatalog
+$productCatalogName = Electronics Product Catalog
+
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]), CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+$productCV = catalogVersion(catalog(id[default=$productCatalog]), version[default='Staged'])[unique=true, default=$productCatalog:Staged]
+$category = category(code, $productCV)
+$supercategories = source(code, $productCV)[unique=true]
+$categories = target(code, $productCV)[unique=true]
+
+
+# Links
+INSERT_UPDATE CMSLinkComponent; $contentCV[unique = true]; uid[unique = true]; name                   ; url                       ; &linkRef         ; &componentRef    ; target(code)[default = 'sameWindow']; linkName[lang = en]
+                              ;                          ; LegacyOrdersLink  ; Legacy Orders Nav Link ; /my-account/legacy_orders ; LegacyOrdersLink ; LegacyOrdersLink ;                                     ; Legacy Order History ;
+
+# Nav Node
+INSERT_UPDATE CMSNavigationNode; uid[unique = true] ; $contentCV[unique = true]; name         ; parent(uid, $contentCV); links(&linkRef); &nodeRef           ; title[lang = en]
+                               ; LegacyOrderNavNode ;                          ; Legacy Order ; MyAccountNavNode       ;                ; LegacyOrderNavNode ; Legacy Order History
+# Entry
+INSERT_UPDATE CMSNavigationEntry; uid[unique = true]      ; $contentCV[unique = true]; name                               ; navigationNode(&nodeRef); item(CMSLinkComponent.uid, CMSLinkComponent.$contentCV);
+                                ; LegacyOrderNavNodeEntry ;                          ; Legacy Order Navigation Node Entry ; LegacyOrderNavNode      ; LegacyOrdersLink
+
+# Content page
+INSERT_UPDATE ContentPage; $contentCV[unique = true]; uid[unique = true]; name                      ; masterTemplate(uid, $contentCV); label         ; defaultPage[default = 'true']; approvalStatus(code)[default = 'approved']; homepage[default = 'false']
+                         ;                          ; legacy_orders     ; Legacy Order History Page ; AccountPageTemplate            ; legacy_orders ;                              ;                                           ;
