@@ -4,8 +4,9 @@ import de.hybris.platform.commerceservices.search.pagedata.PageableData;
 import de.hybris.platform.commerceservices.search.pagedata.SearchPageData;
 import de.hybris.platform.core.model.user.CustomerModel;
 import de.hybris.platform.servicelayer.internal.dao.Dao;
+import de.hybris.training.core.model.LegacyOrderModel;
 
 public interface LegacyOrdersDao extends Dao {
 
-    public SearchPageData<Object> getOrdersByUser(CustomerModel customer, PageableData pageData);
+    public SearchPageData<LegacyOrderModel> getOrdersByUser(CustomerModel customer, PageableData pageData);
 }

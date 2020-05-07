@@ -4,8 +4,8 @@ import de.hybris.platform.commerceservices.search.pagedata.PageableData;
 import de.hybris.platform.commerceservices.search.pagedata.SearchPageData;
 import de.hybris.platform.commerceservices.search.flexiblesearch.PagedFlexibleSearchService;
 import de.hybris.platform.commerceservices.search.flexiblesearch.data.SortQueryData;
-import de.hybris.platform.core.model.order.OrderModel;
 import de.hybris.platform.core.model.user.CustomerModel;
+import de.hybris.platform.servicelayer.internal.dao.AbstractItemDao;
 import de.hybris.training.core.daos.LegacyOrdersDao;
 import de.hybris.training.core.model.LegacyOrderModel;
 
@@ -16,7 +16,7 @@ import java.util.Map;
 
 import static de.hybris.platform.servicelayer.util.ServicesUtil.validateParameterNotNull;
 
-public class DefaultLegacyOrdersDao implements LegacyOrdersDao {
+public class DefaultLegacyOrdersDao extends AbstractItemDao implements LegacyOrdersDao {
 
     private PagedFlexibleSearchService pagedFlexibleSearchService;
 
@@ -25,10 +25,10 @@ public class DefaultLegacyOrdersDao implements LegacyOrdersDao {
             + LegacyOrderModel.CREATIONTIME + "}, {" + LegacyOrderModel.ORDERNUMBER + "} FROM {"
             + LegacyOrderModel._TYPECODE + "} WHERE {" + LegacyOrderModel.CUSTOMER + "} = ?customer";
 
-    private static final String SORT_ORDERS_BY_DATE = " ORDER BY {" + OrderModel.CREATIONTIME + "} DESC, {" + OrderModel.PK + "}";
+    private static final String SORT_ORDERS_BY_DATE = " ORDER BY {" + LegacyOrderModel.CREATIONTIME + "} DESC, {" + LegacyOrderModel.PK + "}";
 
     @Override
-    public SearchPageData<Object> getOrdersByUser(CustomerModel customer, PageableData pageData) {
+    public SearchPageData<LegacyOrderModel> getOrdersByUser(CustomerModel customer, PageableData pageData) {
 
         validateParameterNotNull(customer, "Customer must not be null");
 
