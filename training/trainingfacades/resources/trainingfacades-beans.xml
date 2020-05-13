@@ -15,4 +15,11 @@
 		<property name="code" type="String"/>
 		<property name="name" type="String"/>
 	</bean>
+	
+	<bean class="de.hybris.training.facades.legacyorders.data.LegacyOrderData">
+		<property name="orderTotal" type="java.lang.Double"/>
+		<property name="orderStatus" type="java.lang.String"/>
+		<property name="orderNumber" type="java.lang.String"/>
+		<property name="placed" type="java.util.Date"/>
+	</bean>
 </beans>

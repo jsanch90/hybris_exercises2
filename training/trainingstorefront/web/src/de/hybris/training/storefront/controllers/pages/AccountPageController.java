@@ -52,6 +52,8 @@ import de.hybris.platform.servicelayer.exceptions.AmbiguousIdentifierException;
 import de.hybris.platform.servicelayer.exceptions.ModelNotFoundException;
 import de.hybris.platform.servicelayer.exceptions.UnknownIdentifierException;
 import de.hybris.platform.util.Config;
+import de.hybris.training.facades.facades.LegacyOrderFacade;
+import de.hybris.training.facades.legacyorders.data.LegacyOrderData;
 import de.hybris.training.storefront.controllers.ControllerConstants;
 
 import java.util.Arrays;
@@ -195,6 +197,9 @@ public class AccountPageController extends AbstractSearchPageController
 	@Resource(name = "addressDataUtil")
 	private AddressDataUtil addressDataUtil;
 
+	@Resource(name = "legacyOrderFacade")
+	private LegacyOrderFacade legacyOrderFacade;
+
 	protected PasswordValidator getPasswordValidator()
 	{
 		return passwordValidator;
@@ -325,7 +330,7 @@ public class AccountPageController extends AbstractSearchPageController
 	{
 		// Handle paged search results
 		final PageableData pageableData = createPageableData(page, 5, sortCode, showMode);
-		final SearchPageData<OrderHistoryData> searchPageData = orderFacade.getPagedOrderHistoryForStatuses(pageableData);
+		final SearchPageData<LegacyOrderData> searchPageData = legacyOrderFacade.getPagedLegacyOrderHistory(pageableData);
 		populateModel(model, searchPageData, showMode);
 		final ContentPageModel orderHistoryPage = getContentPageForLabelOrId(LEGACY_ORDER_HISTORY_CMS_PAGE);
 		storeCmsPageInModel(model, orderHistoryPage);
