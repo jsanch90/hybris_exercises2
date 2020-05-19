@@ -1,0 +1,62 @@
+$contentCatalog = electronicsContentCatalog
+$contentCatalogName = Electronics Content Catalog
+$productCatalog = electronicsProductCatalog
+$productCatalogName = Electronics Product Catalog
+
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]), CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+$productCV = catalogVersion(catalog(id[default=$productCatalog]), version[default='Staged'])[unique=true, default=$productCatalog:Staged]
+$category = category(code, $productCV)
+$supercategories = source(code, $productCV)[unique=true]
+$categories = target(code, $productCV)[unique=true]
+
+
+# Links
+INSERT_UPDATE CMSLinkComponent; $contentCV[unique = true]; uid[unique = true]; name                   ; url                       ; &linkRef         ; &componentRef    ; target(code)[default = 'sameWindow']; linkName[lang = en]
+                              ;                          ; LegacyOrdersLink  ; Legacy Orders Nav Link ; /my-account/legacy_orders ; LegacyOrdersLink ; LegacyOrdersLink ;                                     ; Legacy Order History ;
+
+# Nav Node
+INSERT_UPDATE CMSNavigationNode; uid[unique = true] ; $contentCV[unique = true]; name         ; parent(uid, $contentCV); links(&linkRef); &nodeRef           ; title[lang = en]
+                               ; LegacyOrderNavNode ;                          ; Legacy Order ; MyAccountNavNode       ;                ; LegacyOrderNavNode ; Legacy Order History
+# Entry
+INSERT_UPDATE CMSNavigationEntry; uid[unique = true]      ; $contentCV[unique = true]; name                               ; navigationNode(&nodeRef); item(CMSLinkComponent.uid, CMSLinkComponent.$contentCV);
+                                ; LegacyOrderNavNodeEntry ;                          ; Legacy Order Navigation Node Entry ; LegacyOrderNavNode      ; LegacyOrdersLink
+
+###### Legacy Order History Page Start ######
+INSERT_UPDATE ContentSlot; $contentCV[unique = true]; uid[unique = true]           ; name                                                  ; active; cmsComponents(&componentRef)       ; ; ;
+                         ;                          ; SideContentSlot-legacyOrders ; Side Content Slot for My Account Legacy Order History ; true  ;                                    ; ; ;
+                         ;                          ; BodyContentSlot-legacyOrders ; Body Content Slot for My Account Legacy Order History ; true  ; AccountLegacyOrderHistoryComponent ; ; ;
+
+INSERT_UPDATE ContentSlotForPage; $contentCV[unique = true]; uid[unique = true]       ; position[unique = true]; page(uid, $contentCV)[unique = true][default = 'legacy_orders']; contentSlot(uid, $contentCV)[unique = true]; ; ;
+                                ;                          ; SideContent-legacyOrders ; SideContent            ;                                                                ; SideContentSlot-legacyOrders               ; ; ;
+                                ;                          ; BodyContent-legacyOrders ; BodyContent            ;                                                                ; BodyContentSlot-legacyOrders               ; ; ;
+
+INSERT_UPDATE JspIncludeComponent; $contentCV[unique = true]; uid[unique = true]                 ; name                             ; page                              ; actions(uid, $contentCV); &componentRef
+                                 ;                          ; AccountLegacyOrderHistoryComponent ; Account Legacy History Component ; accountLegacyOrderHistoryPage.jsp ; ViewOrderAction         ; AccountLegacyOrderHistoryComponent
+
+# ViewOrderAction
+INSERT_UPDATE ViewOrderAction; $contentCV[unique = true]; uid[unique = true]    ; url                                  ; name                     ; &actionRef
+                             ;                          ; ViewLegacyOrderAction ; /my-account/legacy_order/{orderCode} ; View Legacy Order Action ; ViewLegacyOrderAction
+# Content page
+INSERT_UPDATE ContentPage; $contentCV[unique = true]; uid[unique = true]; name                      ; masterTemplate(uid, $contentCV); label         ; defaultPage[default = 'true']; approvalStatus(code)[default = 'approved']; homepage[default = 'false']
+                         ;                          ; legacy_orders     ; Legacy Order History Page ; AccountPageTemplate            ; legacy_orders ;                              ;                                           ;
+###### Legacy Order History Page End ######
+
+
+###### Legacy Order Details Page Start ######
+INSERT_UPDATE ContentSlot; $contentCV[unique = true]; uid[unique = true]                ; name                                                  ; active; cmsComponents(&componentRef)                                                                                                                                                                                     ;
+                         ;                          ; SideContentSlot-legacyorderdetail ; Side Content Slot for My Account Legacy Order Details ; true  ;                                                                                                                                                                                                                  ; ; ;
+                         ;                          ; BodyContentSlot-legacyorderdetail ; Body Content Slot for My Account Legacy Order Details ; true  ; AccountLegacyOrderDetailsHeadlineComponent,AccountLegacyOrderDetailsOverviewComponent,AccountLegacyOrderDetailsItemsComponent,AccountLegacyOrderDetailsActionsComponent ;
+
+INSERT_UPDATE ContentSlotForPage; $contentCV[unique = true]; uid[unique = true]            ; position[unique = true]; page(uid, $contentCV)[unique = true][default = 'legacy_order']; contentSlot(uid, $contentCV)[unique = true]; ; ;
+                                ;                          ; SideContent-legacyorderdetail ; SideContent            ;                                                               ; SideContentSlot-legacyorderdetail          ; ; ;
+                                ;                          ; BodyContent-legacyorderdetail ; BodyContent            ;                                                               ; BodyContentSlot-legacyorderdetail          ; ; ;
+
+INSERT_UPDATE JspIncludeComponent; $contentCV[unique = true]; uid[unique = true]                         ; name                                                 ; page                                    ; actions(uid, $contentCV); &componentRef
+                                 ;                          ; AccountLegacyOrderDetailsHeadlineComponent ; Account Legacy Order Details Headline Component      ; accountLegacyOrderDetailHeadline.jsp    ;                         ; AccountLegacyOrderDetailsHeadlineComponent
+                                 ;                          ; AccountLegacyOrderDetailsItemsComponent    ; Account Legacy Order Details Items Info Component    ; accountLegacyOrderDetailItems.jsp       ;                         ; AccountLegacyOrderDetailsItemsComponent
+                                 ;                          ; AccountLegacyOrderDetailsActionsComponent  ; Account Legacy Order Details Actions Component       ; accountLegacyOrderDetailActions.jsp     ;                         ; AccountLegacyOrderDetailsActionsComponent
+                                 ;                          ; AccountLegacyOrderDetailsOverviewComponent ; Account Legacy Order Details Overview Info Component ; accountLegacyOrderDetailOverview.jsp    ;                         ; AccountLegacyOrderDetailsOverviewComponent
+
+INSERT_UPDATE ContentPage; $contentCV[unique = true]; uid[unique = true]; name                      ; masterTemplate(uid, $contentCV); label; defaultPage[default = 'true']; approvalStatus(code)[default = 'approved']; homepage[default = 'false'];
+                         ;                          ; legacy_order      ; Legacy Order Details Page ; AccountPageTemplate            ; order
+###### Legacy Order Details Page End ######
