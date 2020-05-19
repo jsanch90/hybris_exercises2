@@ -8,5 +8,8 @@ import de.hybris.training.core.model.LegacyOrderModel;
 
 public interface LegacyOrdersDao extends Dao {
 
-    public SearchPageData<LegacyOrderModel> getOrdersByUser(CustomerModel customer, PageableData pageData);
+    SearchPageData<LegacyOrderModel> getOrdersByUser(CustomerModel customer, PageableData pageData);
+
+    LegacyOrderModel findOrderByCustomerAndCode(CustomerModel customer, String orderCode);
+
 }

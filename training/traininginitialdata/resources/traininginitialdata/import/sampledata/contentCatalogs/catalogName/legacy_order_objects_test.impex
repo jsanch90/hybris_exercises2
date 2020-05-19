@@ -9,6 +9,9 @@ $category = category(code, $productCV)
 $supercategories = source(code, $productCV)[unique=true]
 $categories = target(code, $productCV)[unique=true]
 
-INSERT_UPDATE LegacyOrder;  orderNumber[unique = true]; orderTotal; orderStatus   ;
-                         ;  1234                      ; 1234.12   ; CHECKED_VALID ;
-                         ;  5678                      ; 12.4      ; ORDER_SPLIT   ;
+INSERT_UPDATE LegacyOrder; orderNumber[unique = true]; orderTotal; orderStatus(code); customer(uid)
+                         ; 1234                      ; 1234.12   ; CHECKED_VALID    ;
+                         ; 5678                      ; 12.4      ; ORDER_SPLIT      ; p4rsek@gmail.com
+
+INSERT_UPDATE LegacyOrderEntry; uid[unique = true]; quantity; basePrice; product(code,catalogVersion); legacyOrder(orderNumber)
+                              ; entry1            ; 2       ; 122      ; 489702:Online       ; 567822

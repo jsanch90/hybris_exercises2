@@ -20,6 +20,13 @@ public class DefaultLegacyOrderService implements LegacyOrderService {
         return getLegacyOrdersDao().getOrdersByUser(customer,pageData);
     }
 
+    @Override
+    public LegacyOrderModel getOrderForCode(CustomerModel customer, String orderCode) {
+        validateParameterNotNull(customer, "Customer model cannot be null");
+        validateParameterNotNull(orderCode, "Order code cannot be null");
+        return getLegacyOrdersDao().findOrderByCustomerAndCode(customer, orderCode);
+    }
+
     public LegacyOrdersDao getLegacyOrdersDao() {
         return legacyOrdersDao;
     }

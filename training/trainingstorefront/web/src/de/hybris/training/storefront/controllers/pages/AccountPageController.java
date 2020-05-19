@@ -125,6 +125,7 @@ public class AccountPageController extends AbstractSearchPageController
 	private static final String REDIRECT_TO_UPDATE_PROFILE = REDIRECT_PREFIX + "/my-account/update-profile";
 	private static final String REDIRECT_TO_PASSWORD_UPDATE_PAGE = REDIRECT_PREFIX + "/my-account/update-password";
 	private static final String REDIRECT_TO_ORDER_HISTORY_PAGE = REDIRECT_PREFIX + "/my-account/orders";
+	private static final String REDIRECT_TO_LEGACY_ORDER_HISTORY_PAGE = REDIRECT_PREFIX + "/my-account/legacy_orders";
 	private static final String REDIRECT_TO_CONSENT_MANAGEMENT = REDIRECT_PREFIX + "/my-account/consents";
 
 	/**
@@ -147,6 +148,7 @@ public class AccountPageController extends AbstractSearchPageController
 	private static final String ORDER_HISTORY_CMS_PAGE = "orders";
 	private static final String LEGACY_ORDER_HISTORY_CMS_PAGE = "legacy_orders";
 	private static final String ORDER_DETAIL_CMS_PAGE = "order";
+	private static final String LEGACY_ORDER_DETAIL_CMS_PAGE = "legacy_order";
 	private static final String CONSENT_MANAGEMENT_CMS_PAGE = "consents";
 	private static final String CLOSE_ACCOUNT_CMS_PAGE = "close-account";
 
@@ -365,6 +367,37 @@ public class AccountPageController extends AbstractSearchPageController
 			return REDIRECT_TO_ORDER_HISTORY_PAGE;
 		}
 		final ContentPageModel orderDetailPage = getContentPageForLabelOrId(ORDER_DETAIL_CMS_PAGE);
+		storeCmsPageInModel(model, orderDetailPage);
+		model.addAttribute(ThirdPartyConstants.SeoRobots.META_ROBOTS, ThirdPartyConstants.SeoRobots.NOINDEX_NOFOLLOW);
+		setUpMetaDataForContentPage(model, orderDetailPage);
+		return getViewForPage(model);
+	}
+
+	@RequestMapping(value = "/legacy_order/" + ORDER_CODE_PATH_VARIABLE_PATTERN, method = RequestMethod.GET)
+	@RequireHardLogIn
+	public String legacyOrder(@PathVariable("orderCode") final String orderCode, final Model model,
+						final RedirectAttributes redirectModel) throws CMSItemNotFoundException
+	{
+		try
+		{
+			final LegacyOrderData orderDetails = legacyOrderFacade.getOrderDetailsForCode(orderCode);
+			model.addAttribute("orderData", orderDetails);
+
+			final List<Breadcrumb> breadcrumbs = accountBreadcrumbBuilder.getBreadcrumbs(null);
+			breadcrumbs.add(new Breadcrumb("/my-account/legacy_orders",
+					getMessageSource().getMessage("text.account.orderHistory", null, getI18nService().getCurrentLocale()), null));
+			breadcrumbs.add(new Breadcrumb("#", getMessageSource().getMessage("text.account.order.orderBreadcrumb", new Object[]
+					{ orderDetails.getOrderNumber() }, "Order {0}", getI18nService().getCurrentLocale()), null));
+			model.addAttribute(BREADCRUMBS_ATTR, breadcrumbs);
+
+		}
+		catch (final UnknownIdentifierException e)
+		{
+			LOG.warn("Attempted to load a order that does not exist or is not visible", e);
+			GlobalMessages.addFlashMessage(redirectModel, GlobalMessages.ERROR_MESSAGES_HOLDER, "system.error.page.not.found", null);
+			return REDIRECT_TO_LEGACY_ORDER_HISTORY_PAGE;
+		}
+		final ContentPageModel orderDetailPage = getContentPageForLabelOrId(LEGACY_ORDER_DETAIL_CMS_PAGE);
 		storeCmsPageInModel(model, orderDetailPage);
 		model.addAttribute(ThirdPartyConstants.SeoRobots.META_ROBOTS, ThirdPartyConstants.SeoRobots.NOINDEX_NOFOLLOW);
 		setUpMetaDataForContentPage(model, orderDetailPage);

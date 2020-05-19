@@ -4,22 +4,33 @@
 -->
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="beans.xsd">
 
-	<bean class="de.hybris.platform.commercefacades.product.data.ProductData">
-		<property name="genders" type="java.util.List&lt;de.hybris.training.facades.product.data.GenderData>"/>
-		<property name="myCreationDate" type="java.util.Date"/>
-		<property name="formattedMyCreationDate" type="java.lang.String"/>
-		<property name="pastDays" type="java.lang.String"/>
-	</bean>
+    <bean class="de.hybris.platform.commercefacades.product.data.ProductData">
+        <property name="genders" type="java.util.List&lt;de.hybris.training.facades.product.data.GenderData>"/>
+        <property name="myCreationDate" type="java.util.Date"/>
+        <property name="formattedMyCreationDate" type="java.lang.String"/>
+        <property name="pastDays" type="java.lang.String"/>
+    </bean>
 
-	<bean class="de.hybris.training.facades.product.data.GenderData">
-		<property name="code" type="String"/>
-		<property name="name" type="String"/>
-	</bean>
-	
-	<bean class="de.hybris.training.facades.legacyorders.data.LegacyOrderData">
-		<property name="orderTotal" type="java.lang.Double"/>
-		<property name="orderStatus" type="java.lang.String"/>
-		<property name="orderNumber" type="java.lang.String"/>
-		<property name="placed" type="java.util.Date"/>
-	</bean>
+    <bean class="de.hybris.training.facades.product.data.GenderData">
+        <property name="code" type="String"/>
+        <property name="name" type="String"/>
+    </bean>
+
+    <bean class="de.hybris.training.facades.legacyorders.data.LegacyOrderData">
+        <property name="orderTotal" type="java.lang.Double"/>
+        <property name="orderStatus" type="java.lang.String"/>
+        <property name="orderNumber" type="java.lang.String"/>
+        <property name="placed" type="java.util.Date"/>
+        <property name="orderEntries"
+                  type="java.util.List&lt;de.hybris.training.facades.legacyorders.data.LegacyOrderEntryData>"/>
+    </bean>
+
+    <bean class="de.hybris.training.facades.legacyorders.data.LegacyOrderEntryData">
+        <property name="uid" type="java.lang.String"/>
+        <property name="quantity" type="java.lang.Integer"/>
+        <property name="product" type="de.hybris.platform.commercefacades.product.data.ProductData"/>
+        <property name="basePrice" type="java.lang.Double"/>
+        <property name="entries"
+                  type="java.util.List&lt;de.hybris.training.facades.legacyorders.data.LegacyOrderEntryData>"/>
+    </bean>
 </beans>

@@ -193,7 +193,9 @@
 	<alias alias="myCreationDateFacade" name="defaultMyCreationDateFacade"/>
 	<bean id="defaultMyCreationDateFacade" class="de.hybris.training.facades.mycreationdatefacade.impl.DefaultMyCreationDateFacade" parent="productFacade"/>
 
-	<bean id="legacyOrderHistoryPopulator" class="de.hybris.training.facades.populators.LegacyOrderPopulator"/>
+	<bean id="legacyOrderHistoryPopulator" class="de.hybris.training.facades.populators.LegacyOrderPopulator">
+		<property name="legacyOrderEntryConverter" ref="legacyOrderEntryConverter"/>
+	</bean>
 
 	<bean id="legacyOrderConverter" parent="abstractPopulatingConverter">
 		<property name="targetClass" value="de.hybris.training.facades.legacyorders.data.LegacyOrderData"/>
@@ -209,6 +211,19 @@
 		<property name="userService" ref="userService"/>
 		<property name="legacyOrderConverter" ref="legacyOrderConverter"/>
 		<property name="legacyOrderService" ref="legacyOrderService"/>
+	</bean>
+
+	<bean id="legacyOrderEntryConverter" parent="abstractPopulatingConverter">
+		<property name="targetClass" value="de.hybris.training.facades.legacyorders.data.LegacyOrderEntryData"/>
+		<property name="populators">
+			<list merge="true">
+				<ref bean="legacyOrderEntryPopulator"/>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="legacyOrderEntryPopulator" class="de.hybris.training.facades.populators.LegacyOrderEntryPopulator">
+		<property name="productConverter" ref="orderEntryProductConverter"/>
 	</bean>
 
 </beans>

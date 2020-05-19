@@ -8,4 +8,6 @@ public interface LegacyOrderFacade {
 
     SearchPageData<LegacyOrderData> getPagedLegacyOrderHistory(PageableData pageableData);
 
+    LegacyOrderData getOrderDetailsForCode(String orderCode);
+
 }
