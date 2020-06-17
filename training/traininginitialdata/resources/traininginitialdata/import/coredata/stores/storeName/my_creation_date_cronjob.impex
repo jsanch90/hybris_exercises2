@@ -1,0 +1,11 @@
+# Define the ScriptingJob
+INSERT_UPDATE ScriptingJob; code[unique = true]; scriptURI
+                          ; myCreationDateJob  ; model://myCreationDateJob
+
+# Define the CronJob
+INSERT_UPDATE CronJob; code[unique = true]         ; job(code)         ; sessionLanguage(isocode)
+                     ; updateMyCreationDateCronJob ; myCreationDateJob ; en
+
+# Define the trigger
+INSERT_UPDATE Trigger; cronjob(code)[unique = true]; cronExpression
+                     ; updateMyCreationDateCronJob ; * 0/20 * * * ?
